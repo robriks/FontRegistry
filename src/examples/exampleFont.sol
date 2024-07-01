@@ -29,7 +29,7 @@ contract ExampleFont is OwnableRoles, IFont {
     ==============================================================*/
 
     // credit to the person that uploaded the font
-    address public fontUploader = msg.sender;
+    address public immutable fontUploader = msg.sender;
 
     // Note: below doesn't follow the convenction of ALL CAPS for constants
     // if you want to follow convention, just write explicit functions for the interface
@@ -48,16 +48,16 @@ contract ExampleFont is OwnableRoles, IFont {
     // any standard descriptor of the font style
     string public constant fontStyle = "normal";
 
+    // key of this Font in the FontRegistry's storage mapping
+    bytes32 public constant fontRegistryKey = keccak256(abi.encodePacked(fontName));
+
     /*==============================================================
     ==                      Custom Font Logic                     ==
     ==============================================================*/
 
     // function the script calls to uplod the different partitions to contract storage
     // check exampleFontUpload.js to see how we upload fonts
-    function saveFile(uint256 index, string calldata fileContent)
-        external
-        onlyOwner
-    {
+    function saveFile(uint256 index, string calldata fileContent) external onlyOwner {
         files[index] = SSTORE2.write(bytes(fileContent));
     }
 
@@ -72,15 +72,14 @@ contract ExampleFont is OwnableRoles, IFont {
 
     // reconstruct full font and return it
     function getFont() external view returns (string memory) {
-        return
-            string(
-                abi.encodePacked(
-                    SSTORE2.read(files[0]),
-                    SSTORE2.read(files[1]),
-                    SSTORE2.read(files[2]),
-                    SSTORE2.read(files[3]),
-                    SSTORE2.read(files[4])
-                )
-            );
+        return string(
+            abi.encodePacked(
+                SSTORE2.read(files[0]),
+                SSTORE2.read(files[1]),
+                SSTORE2.read(files[2]),
+                SSTORE2.read(files[3]),
+                SSTORE2.read(files[4])
+            )
+        );
     }
 }

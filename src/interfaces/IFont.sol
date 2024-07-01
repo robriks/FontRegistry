@@ -30,4 +30,7 @@ interface IFont {
 
     // return the full base64 encoded font with data uri scheme prefix (`data:font/ttf;charset=utf-8;base64,`)
     function getFont() external view returns (string memory);
+
+    // returns this font's key in the FontRegistry's storage mapping
+    function fontRegistryKey() external view returns (bytes32);
 }

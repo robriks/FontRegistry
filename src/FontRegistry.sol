@@ -35,9 +35,7 @@ contract FontRegistry is OwnableRoles {
     /// @dev only owners (maintainers) of the registry can add fonts after properly verifying the font
     /// @param fontAddress address of the IFont contract
     function addFontToRegistry(address fontAddress) external onlyOwner {
-        fonts[
-            keccak256(abi.encodePacked(IFont(fontAddress).fontName()))
-        ] = fontAddress;
+        fonts[keccak256(abi.encodePacked(IFont(fontAddress).fontName()))] = fontAddress;
     }
 
     /// @dev only owners (maintainers) of the registry can delete fonts from the registry
@@ -51,11 +49,13 @@ contract FontRegistry is OwnableRoles {
     /// @dev query existing fonts in the registry (searchable on the website)
     /// @param fontName font name as found on the website
     /// @dev returns base64 encoded string of the font
-    function getFont(string calldata fontName)
-        external
-        view
-        returns (string memory)
-    {
-        return IFont(fonts[keccak256(abi.encodePacked(fontName))]).getFont();
+    function getFont(string calldata fontName) external view returns (string memory) {
+        return IFont(fonts[getFontKey(fontName)]).getFont();
+    }
+
+    /// @dev derive the font's 32 byte key from its name, for use with the `fonts` storage mapping
+    /// @param fontName font name as found on the website
+    function getFontKey(string calldata fontName) public pure returns (bytes32) {
+        return keccak256(abi.encodePacked(fontName));
     }
 }

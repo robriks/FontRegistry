@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
+import {IFontRegistry} from "./interfaces/IFontRegistry.sol";
 import {IFont} from "./interfaces/IFont.sol";
 import {OwnableRoles} from "solady/auth/OwnableRoles.sol";
 
@@ -24,7 +25,7 @@ import {OwnableRoles} from "solady/auth/OwnableRoles.sol";
 /// All credits will be given to the font uploaders.
 ///
 /// @author @0x_beans
-contract FontRegistry is OwnableRoles {
+contract FontRegistry is OwnableRoles, IFontRegistry {
     // keccak256(fontName) => address of base64 encoded font
     mapping(bytes32 => address) public fonts;
 

@@ -7,6 +7,7 @@ pragma solidity ^0.8.13;
 
 interface IFontRegistry {
     function getFont(string calldata fontName) external view returns (string memory);
+    function getFontKey(string calldata fontName) external pure returns (bytes32);
 
     /// @dev Gated functions (restricted to the owner only)
     function addFontToRegistry(address fontAddress) external;

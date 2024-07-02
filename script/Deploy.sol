@@ -2,11 +2,17 @@
 pragma solidity ^0.8.13;
 
 import "forge-std/Script.sol";
+import "src/FontRegistry.sol";
 
 contract Deploy is Script {
-    function setUp() public {}
+
+    FontRegistry fontRegistry;
 
     function run() public {
-        vm.broadcast();
+        vm.startBroadcast();
+
+        fontRegistry = new FontRegistry();
+        
+        vm.stopBroadcast();
     }
 }
